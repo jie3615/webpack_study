@@ -9,16 +9,38 @@ module.exports = {
         open:true,
         compress:true
     },
-    mode:'production',//默认两种production,development
+    mode:'development',//默认两种production,development
     entry:'./src/index.js',//入口
     output:{
-        filename:'bundle.js',// 打包后的文件名
+        filename:'bundle.[hash:8].js',// 打包后的文件名
         path:path.resolve(__dirname,'build') // 路径必须是一个绝对路径
     },
     plugins:[
         new htmlwebpackPlugin({
             template:'./src/index.html',
-            filename:'index.html'
+            filename:'index.html',
+            minify:{
+                removeAttributeQuotes:true,
+                collapseWhitespace:true,
+
+            },
+            hash:true
+
         })
-    ]
-}
+    ],
+    module:{// 模块
+        //规则
+        rules:[ // css-loader
+               // loader默认执行顺序是从右向左执行，从下到上执行
+               {
+                test:/\.css$/,
+                use:[
+                    {
+                        loader:'style-loader'
+                    }
+                    ,'css-loader'
+                    ]
+                }
+            ]
+            }
+    }
